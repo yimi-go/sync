@@ -4,7 +4,7 @@
 # ==============================================================================
 # Build options
 
-ROOT_PACKAGE=github.com/yimi-go/logging
+ROOT_PACKAGE=github.com/yimi-go/sync
 
 # ==============================================================================
 # Includes
