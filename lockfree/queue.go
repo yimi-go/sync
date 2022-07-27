@@ -2,7 +2,6 @@ package lockfree
 
 import (
 	"math"
-	stdSync "sync"
 	"sync/atomic"
 	"unsafe"
 
@@ -26,7 +25,6 @@ type Queue[E any] struct {
 	count uint64
 	dummy *node
 	_pad  [8]uint64 // avoid false sharing
-	pool  stdSync.Pool
 }
 
 // NewQueue creates a new Queue by options.
@@ -37,7 +35,6 @@ func NewQueue[E any](opts ...QueueOption[E]) *Queue[E] {
 	q := &Queue[E]{
 		cap:   math.MaxUint64, // unlimited by default.
 		dummy: &dummy,
-		pool:  stdSync.Pool{New: func() any { return &node{} }},
 	}
 	for _, opt := range opts {
 		opt(q)
@@ -50,7 +47,7 @@ func (q *Queue[E]) Len() uint64 {
 }
 
 func (q *Queue[E]) Enqueue(v E) error {
-	n := q.pool.Get().(*node)
+	n := nodePool.Get().(*node)
 	atomic.StorePointer(&n.val, unsafe.Pointer(&v))
 	atomic.StorePointer(&n.nxt, unsafe.Pointer(q.dummy))
 	for {
@@ -84,7 +81,7 @@ func (q *Queue[E]) Dequeue() (v E, err error) {
 			atomic.StorePointer(&first.val, nil)
 			atomic.StorePointer(&first.prv, nil)
 			atomic.StorePointer(&first.nxt, nil)
-			q.pool.Put(first)
+			nodePool.Put(first)
 			return v, nil
 		}
 	}

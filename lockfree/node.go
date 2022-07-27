@@ -1,6 +1,7 @@
 package lockfree
 
 import (
+	stdSync "sync"
 	"sync/atomic"
 	"unsafe"
 )
@@ -24,4 +25,8 @@ func (n *node) next() *node {
 
 func (n *node) casNext(expected, target *node) bool {
 	return atomic.CompareAndSwapPointer(&n.nxt, unsafe.Pointer(expected), unsafe.Pointer(target))
+}
+
+var nodePool = &stdSync.Pool{
+	New: func() any { return &node{} },
 }
