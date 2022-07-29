@@ -1,8 +1,10 @@
 package lockfree
 
 import (
+	"runtime"
 	stdSync "sync"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -117,4 +119,39 @@ func BenchmarkQueue(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		doBench(q)
 	}
+}
+
+func BenchmarkQueueIter_Next(b *testing.B) {
+	q := NewQueue[float64]()
+	stop := make(chan struct{})
+	go func() {
+		i := 0
+		for {
+			select {
+			case <-stop:
+				return
+			default:
+				if i&1 == 0 {
+					_ = q.Enqueue(1)
+				} else {
+					_, _ = q.Dequeue()
+				}
+				i++
+				time.Sleep(time.Millisecond)
+			}
+		}
+	}()
+	b.SetParallelism(runtime.NumCPU())
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			it := q.Iterate()
+			for {
+				if _, ok := it.Next(); !ok {
+					break
+				}
+			}
+		}
+	})
+	close(stop)
 }

@@ -24,7 +24,8 @@ type Queue[E any] struct {
 	cap   uint64
 	count uint64
 	dummy *node
-	_pad  [8]uint64 // avoid false sharing
+	//nolint:unused
+	_pad [8]uint64 // avoid false sharing
 }
 
 // NewQueue creates a new Queue by options.
@@ -101,10 +102,17 @@ type queueIter[E any] struct {
 }
 
 func (it *queueIter[E]) Next() (v E, ok bool) {
-	if it.next == it.dummy {
-		return
+	for {
+		if it.next == it.dummy {
+			return
+		}
+		vp := it.next.value()
+		next := it.next.next()
+		if vp == nil || next == nil {
+			it.next = it.dummy.next()
+			continue
+		}
+		v, it.next = *(*E)(vp), next
+		return v, true
 	}
-	v = *(*E)(it.next.value())
-	it.next = it.next.next()
-	return v, true
 }
