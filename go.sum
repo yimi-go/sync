@@ -9,8 +9,8 @@ github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UV
 github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.8.0 h1:pSgiaMZlXftHpm5L7V1+rVB+AZJydKsMxsQBIJw4PKk=
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
-github.com/yimi-go/logging v0.0.1 h1:X2rdcs7zl8UFAWdcpb2CNLG651ALtbpDK9chn9HE5t8=
-github.com/yimi-go/logging v0.0.1/go.mod h1:RQ/+j8km0JRZh7CG8YN+/aUfdy0VWfErmPdFluT7sT0=
+github.com/yimi-go/logging v0.0.2 h1:jnU4wNCeeLeuc+StHy6FRW9ehqWfpIMcwUiTCgnAl8E=
+github.com/yimi-go/logging v0.0.2/go.mod h1:RQ/+j8km0JRZh7CG8YN+/aUfdy0VWfErmPdFluT7sT0=
 go.uber.org/atomic v1.9.0 h1:ECmE8Bn/WFTYwEW/bpKD3M8VtR/zQVbavAoalC1PYyE=
 go.uber.org/atomic v1.9.0/go.mod h1:fEN4uk6kAWBTFdckzkM89CLk9XfWZrxpCo0nPH17wJc=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
